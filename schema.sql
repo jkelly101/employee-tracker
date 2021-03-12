@@ -1,11 +1,24 @@
 -- Design the following database schema containing three tables:
 
--- ![Database Schema](Assets/schema.png)
+CREATE DATABASE employee_tracker_db;
+
+USE employee_tracker_db;
 
 -- * **department**:
 
 --   * **id** - INT PRIMARY KEY
 --   * **name** - VARCHAR(30) to hold department name
+
+CREATE TABLE departments(
+id INTEGER auto_increment NOT NULL,
+name VARCHAR(50),
+PRIMARY KEY(id)
+);
+
+INSERT departments(name)
+VALUES ("");
+
+SELECT * FROM departments;
 
 -- * **role**:
 
@@ -14,6 +27,19 @@
 --   * **salary** -  DECIMAL to hold role salary
 --   * **department_id** -  INT to hold reference to department role belongs to
 
+CREATE TABLE roles(
+id INTEGER auto_increment NOT NULL,
+title VARCHAR(50),
+salary INTEGER NOT NULL,
+
+PRIMARY KEY(id)
+);
+
+INSERT roles(title)
+VALUES ("");
+
+SELECT * FROM roles;
+
 -- * **employee**:
 
 --   * **id** - INT PRIMARY KEY
@@ -21,3 +47,16 @@
 --   * **last_name** - VARCHAR(30) to hold employee last name
 --   * **role_id** - INT to hold reference to role employee has
 --   * **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
+
+CREATE TABLE employees(
+id INTEGER auto_increment NOT NULL,
+first_name VARCHAR(50),
+last_name VARCHAR(50),
+
+PRIMARY KEY(id)
+);
+
+INSERT employees(first_name, last_name)
+VALUES ("");
+
+SELECT * FROM employees;
