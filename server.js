@@ -92,42 +92,45 @@ function insertDepartment(data) {
 
 function newRole() {
   choices = choices.map((dbData) => {
-    return { name: dbData.name + "(" + dbData.bid + ")", value: { ...dbData } };
+    return { name: dbData.name, value: { ...dbData } };
   });
-  inquirer.prompt([
-    {
-      type: "input",
-      name: "title",
-      message: "What is the role name?",
-      validate: (input) => {
-        if (input.trim().length <= 0) {
-          return "Invalid entry. Please try again.";
-        } else {
-          return true;
-        }
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "What is the role name?",
+        validate: (input) => {
+          if (input.trim().length <= 0) {
+            return "Invalid entry. Please try again.";
+          } else {
+            return true;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "salary",
-      message: "What is the annual salary for this role?",
-      validate: (input) => {
-        if (input.trim().length <= 0) {
-          return "Invalid entry. Please try again.";
-        } else {
-          return true;
-        }
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the annual salary for this role?",
+        validate: (input) => {
+          if (isNaN(parseInt(input))) {
+            return "Invalid entry. Please try again.";
+          } else {
+            return true;
+          }
+        },
       },
-    },
-    {
-      type: "list",
-      name: "department_id",
-      message: "To which department does this role belong?",
-      choices: choices,
-    },
-  ]);
+      {
+        type: "list",
+        name: "department_id",
+        message: "To which department does this role belong?",
+        choices: choices,
+      },
+    ])
+    .then((response) => {
+      console.log(response);
+    });
 }
-
 
 // * **title** -  VARCHAR(30) to hold role title
 // * **salary** -  DECIMAL to hold role salary
@@ -135,8 +138,6 @@ function newRole() {
 // function insertRole()
 
 // function newEmployee()
-
-
 
 // * **id** - INT PRIMARY KEY
 // * **first_name** - VARCHAR(30) to hold employee first name
