@@ -17,6 +17,7 @@ title VARCHAR(30) NOT NULL,
 salary DECIMAL(8, 2) NOT NULL,
 department_id INTEGER,
 
+-- FOREIGN KEY(id)
 PRIMARY KEY(id)
 );
 
