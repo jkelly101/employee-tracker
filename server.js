@@ -17,6 +17,9 @@ connection.connect((err) => {
 
 // * The command-line application should allow users to:
 
+var departments;
+var roles;
+
 function firstQuestion() {
   inquirer
     .prompt([
@@ -91,8 +94,8 @@ function insertDepartment(data) {
 }
 
 function newRole() {
-  choices = choices.map((dbData) => {
-    return { name: dbData.name, value: { ...dbData } };
+  departmentChoices = departments.map((dbData) => {
+    return { name: dbData.name, value: dbData.id };
   });
   inquirer
     .prompt([
@@ -124,7 +127,8 @@ function newRole() {
         type: "list",
         name: "department_id",
         message: "To which department does this role belong?",
-        choices: choices,
+        choices: departmentChoices,
+        // choices = name of departments from department table
       },
     ])
     .then((response) => {
@@ -137,7 +141,48 @@ function newRole() {
 // * **department_id** -  INT to hold reference to department role belongs to
 // function insertRole()
 
-// function newEmployee()
+function newEmployee() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "first_name",
+      message: "What is employee's first name?",
+      validate: (input) => {
+        if (input.trim().length <= 0) {
+          return "Invalid entry. Please try again.";
+        } else {
+          return true;
+        }
+      },
+    },
+    {
+      type: "input",
+      name: "last_name",
+      message: "What is employee's last name?",
+      validate: (input) => {
+        if (input.trim().length <= 0) {
+          return "Invalid entry. Please try again.";
+        } else {
+          return true;
+        }
+      },
+    },
+    {
+      type: "list",
+      name: "role_id",
+      message: "What is employee's role?",
+      choices: [],
+      // list of role titles from role table
+    },
+    {
+      type: "list",
+      name: "manager_id",
+      message: "Who is employee's manager?",
+      choices: [],
+      // list of names of managers from employee table
+    },
+  ]);
+}
 
 // * **id** - INT PRIMARY KEY
 // * **first_name** - VARCHAR(30) to hold employee first name
@@ -149,7 +194,14 @@ function newRole() {
 
 //   * View departments, roles, employees
 
-// function viewDepartment()
+function viewDepartment(){
+  // *** getAuctionList function
+  connection.query("SELECT * FROM departments", (err, results) => {
+      if(err) return console.error(err);
+      console.table(results);
+      firstQuestion();
+  });
+}
 
 // function viewRoles()
 
