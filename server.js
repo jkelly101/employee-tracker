@@ -23,7 +23,7 @@ function firstQuestion() {
       {
         type: "list",
         message: "What would you like to do?",
-        name: "menu",
+        name: "choices",
         choices: [
           "Add department.",
           "Add role.",
@@ -39,14 +39,14 @@ function firstQuestion() {
     .then((response) => {
       const { menu } = response;
       if (menu === "Add department.") {
-        addDepartment();
+        newDepartment();
       }
     });
 }
 
 //   * Add departments, roles, employees
 
-function addDepartment() {
+function newDepartment() {
   inquirer
     .prompt([
       {
@@ -62,7 +62,17 @@ function addDepartment() {
         },
       },
     ])
-    .then((answers) => {});
+    .then((response) => {
+      response.name = response.name;
+      insertDepartment(response);
+    });
+}
+function insertDepartment(data) {
+  connection.query("INSERT department SET ?", data, (err) => {
+    if (err) return console.error(err);
+    console.log("Department added.");
+    firstQuestion();
+  });
 }
 
 //   * View departments, roles, employees
