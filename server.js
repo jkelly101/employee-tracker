@@ -23,23 +23,38 @@ function firstQuestion() {
       {
         type: "list",
         message: "What would you like to do?",
-        name: "choices",
+        name: "choice",
         choices: [
-          "Add department.",
-          "Add role.",
-          "Add employee.",
-          "View department.",
-          "View roles.",
-          "View employees.",
-          "Update employee role.",
-          "Exit.",
+          "Add department",
+          "Add role",
+          "Add employee",
+          "View department",
+          "View roles",
+          "View employees",
+          "Update employee role",
+          "Exit",
         ],
       },
     ])
     .then((response) => {
-      const { menu } = response;
-      if (menu === "Add department.") {
+      const { choice } = response;
+      if (choice === "Add department") {
         newDepartment();
+      } else if (choice === "Add role") {
+        newRole();
+      } else if (choice === "Add employee") {
+        newEmployee();
+      } else if (choice === "View department") {
+        viewDepartment();
+      } else if (choice === "View roles") {
+        viewRoles();
+      } else if (choice === "View employees") {
+        viewEmployees();
+      } else if (choice === "Update employee role") {
+        updateRole();
+      } else if (choice === "Exit") {
+        console.log("Goodbye!");
+        connection.end();
       }
     });
 }
@@ -74,6 +89,33 @@ function insertDepartment(data) {
     firstQuestion();
   });
 }
+
+function newRole() {
+  choices = choices.map((dbData) => {
+    return { name: dbData.name + "(" + dbData.bid + ")", value: { ...dbData } };
+  });
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "title",
+      message: "What is the Role name?",
+    },
+    {
+      type: "input",
+      name: "salary",
+      message: "What is the annual Salary?",
+    },
+    {
+      type: "list",
+      name: "department_id",
+      message: "Which department does this role fall under?",
+      choices: choices,
+    },
+  ]);
+}
+// * **title** -  VARCHAR(30) to hold role title
+// * **salary** -  DECIMAL to hold role salary
+// * **department_id** -  INT to hold reference to department role belongs to
 
 //   * View departments, roles, employees
 
