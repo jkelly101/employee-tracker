@@ -15,11 +15,6 @@ name VARCHAR(50),
 PRIMARY KEY(id)
 );
 
-INSERT departments(name)
-VALUES ("");
-
-SELECT * FROM departments;
-
 -- * **role**:
 
 --   * **id** - INT PRIMARY KEY
@@ -31,14 +26,10 @@ CREATE TABLE roles(
 id INTEGER auto_increment NOT NULL,
 title VARCHAR(50),
 salary INTEGER NOT NULL,
+department_id INTEGER,
 
 PRIMARY KEY(id)
 );
-
-INSERT roles(title)
-VALUES ("");
-
-SELECT * FROM roles;
 
 -- * **employee**:
 
@@ -52,11 +43,8 @@ CREATE TABLE employees(
 id INTEGER auto_increment NOT NULL,
 first_name VARCHAR(50),
 last_name VARCHAR(50),
+role_id INTEGER,
+manager_id INTEGER,
 
 PRIMARY KEY(id)
 );
-
-INSERT employees(first_name, last_name)
-VALUES ("");
-
-SELECT * FROM employees;
