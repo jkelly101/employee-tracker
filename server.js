@@ -98,25 +98,62 @@ function newRole() {
     {
       type: "input",
       name: "title",
-      message: "What is the Role name?",
+      message: "What is the role name?",
+      validate: (input) => {
+        if (input.trim().length <= 0) {
+          return "Invalid entry. Please try again.";
+        } else {
+          return true;
+        }
+      },
     },
     {
       type: "input",
       name: "salary",
-      message: "What is the annual Salary?",
+      message: "What is the annual salary for this role?",
+      validate: (input) => {
+        if (input.trim().length <= 0) {
+          return "Invalid entry. Please try again.";
+        } else {
+          return true;
+        }
+      },
     },
     {
       type: "list",
       name: "department_id",
-      message: "Which department does this role fall under?",
+      message: "To which department does this role belong?",
       choices: choices,
     },
   ]);
 }
+
+
 // * **title** -  VARCHAR(30) to hold role title
 // * **salary** -  DECIMAL to hold role salary
 // * **department_id** -  INT to hold reference to department role belongs to
+// function insertRole()
+
+// function newEmployee()
+
+
+
+// * **id** - INT PRIMARY KEY
+// * **first_name** - VARCHAR(30) to hold employee first name
+// * **last_name** - VARCHAR(30) to hold employee last name
+// * **role_id** - INT to hold reference to role employee has
+// * **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
+
+// function insertEmployee()
 
 //   * View departments, roles, employees
 
+// function viewDepartment()
+
+// function viewRoles()
+
+// function viewEmployees()
+
 //   * Update employee roles
+
+// function updateRole()
