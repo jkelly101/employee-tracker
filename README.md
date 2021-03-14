@@ -25,13 +25,13 @@ A seed file has been included to get you started.
 ## Usage
 
 The first question will prompt you to choose which action to complete:  
-![first question code](assets/images/first_question.png)
+![first question code](./assets/images/first_question.png)
 
 Depending on which choice you make, different code will run:  
-![conditionals code](assets/images/conditionals.png)
+![conditionals code](./assets/images/conditionals.png)
 
 Validation has been added to prevent NULL for most responses:  
-![validation](assets/images/validate.png)
+![validation](./assets/images/validate.png)
 
 Click here to view a [Live Demo](https://drive.google.com/file/d/1mgAuWLwSz5LAWCCo-3Iodfk-qPskw9cA/view?usp=sharing).
 
