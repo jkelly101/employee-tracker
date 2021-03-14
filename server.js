@@ -18,24 +18,6 @@ connection.connect((err) => {
 let departments;
 let roles;
 
-const validateInput = (input) => {
-  if (input.trim().length <= 0) {
-    return "Invalid entry. Please try again.";
-  } else {
-    return true;
-  }
-};
-
-const validateNum = (input) => {
-  if (isNaN(parseInt(input))) {
-    return "Invalid entry. Please try again.";
-  } else {
-    return true;
-  }
-},
-
-// * The command-line application should allow users to:
-
 function firstQuestion() {
   connection.query("SELECT name, id FROM departments", (err, results) => {
     if (err) return console.error(err);
@@ -87,7 +69,21 @@ function firstQuestion() {
     });
 }
 
-//   * Add departments, roles, employees
+const validateInput = (input) => {
+  if (input.trim().length <= 0) {
+    return "Invalid entry. Please try again.";
+  } else {
+    return true;
+  }
+};
+
+const validateNum = (input) => {
+  if (isNaN(parseInt(input))) {
+    return "Invalid entry. Please try again.";
+  } else {
+    return true;
+  }
+};
 
 function newDepartment() {
   inquirer
@@ -122,20 +118,19 @@ function newRole() {
         type: "input",
         name: "title",
         message: "What is the role name?",
-        validate: validateInput
+        validate: validateInput,
       },
       {
         type: "input",
         name: "salary",
         message: "What is the annual salary for this role?",
-        validate: validateNum
+        validate: validateNum,
       },
       {
         type: "list",
         name: "departments_id",
         message: "To which department does this role belong?",
         choices: departmentChoices,
-        // choices = name of departments from department table
       },
     ])
     .then((response) => {
@@ -156,37 +151,38 @@ function newEmployee() {
   roleChoices = roles.map((dbData) => {
     return { name: dbData.title, value: dbData.id };
   });
-  inquirer.prompt([
-    {
-      type: "input",
-      name: "first_name",
-      message: "What is employee's first name?",
-      validate: validateInput,
-    },
-    {
-      type: "input",
-      name: "last_name",
-      message: "What is employee's last name?",
-      validate: validateInput,
-    },
-    {
-      type: "list",
-      name: "role_id",
-      message: "What is their role?",
-      choices: roleChoices,
-    },
-    {
-      type: "input",
-      name: "manager_id",
-      message: "What is the Manager ID?",
-      validate: validateNum
-    }
-  ])
-  .then((response) => {
-    response.roles_id = parseInt(response.roles_id);
-    response.manager_id = parseInt(response.manager_id);
-    insertEmployee(response);
-  });
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "first_name",
+        message: "What is employee's first name?",
+        validate: validateInput,
+      },
+      {
+        type: "input",
+        name: "last_name",
+        message: "What is employee's last name?",
+        validate: validateInput,
+      },
+      {
+        type: "list",
+        name: "roles_id",
+        message: "What is their role?",
+        choices: roleChoices,
+      },
+      {
+        type: "input",
+        name: "manager_id",
+        message: "What is the Manager ID?",
+        validate: validateNum,
+      },
+    ])
+    .then((response) => {
+      response.roles_id = parseInt(response.roles_id);
+      response.manager_id = parseInt(response.manager_id);
+      insertEmployee(response);
+    });
 }
 function insertEmployee(data) {
   connection.query("INSERT employees SET ?", data, (err) => {
@@ -195,7 +191,6 @@ function insertEmployee(data) {
     firstQuestion();
   });
 }
-
 
 function viewDepartment() {
   connection.query("SELECT * FROM departments", (err, results) => {
@@ -212,7 +207,6 @@ function viewRoles() {
     firstQuestion();
   });
 }
-
 
 function viewEmployees() {
   connection.query("SELECT * FROM employees", (err, results) => {
