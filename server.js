@@ -15,9 +15,6 @@ connection.connect((err) => {
   firstQuestion();
 });
 
-let departments;
-let roles;
-
 function firstQuestion() {
   connection.query("SELECT name, id FROM departments", (err, results) => {
     if (err) return console.error(err);
@@ -216,6 +213,16 @@ function viewEmployees() {
   });
 }
 
-//   * Update employee roles
-
-// function updateRole()
+function updateRole(chosen, role) {
+  const setValue = { roles_id: role };
+  const whereValue = { id: chosen.id };
+  connection.query(
+    "UPDATE roles SET ? WHERE ?",
+    [setValue, whereValue],
+    (err) => {
+      if (err) return console.error(err);
+      console.log("Employee updated.");
+      firstQuestion();
+    }
+  );
+}
