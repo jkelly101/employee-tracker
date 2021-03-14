@@ -26,6 +26,14 @@ const validateInput = (input) => {
   }
 };
 
+const validateNum = (input) => {
+  if (isNaN(parseInt(input))) {
+    return "Invalid entry. Please try again.";
+  } else {
+    return true;
+  }
+},
+
 // * The command-line application should allow users to:
 
 function firstQuestion() {
@@ -120,13 +128,7 @@ function newRole() {
         type: "input",
         name: "salary",
         message: "What is the annual salary for this role?",
-        validate: (input) => {
-          if (isNaN(parseInt(input))) {
-            return "Invalid entry. Please try again.";
-          } else {
-            return true;
-          }
-        },
+        validate: validateNum
       },
       {
         type: "list",
@@ -177,11 +179,10 @@ function newEmployee() {
       // list of role titles from role table
     },
     {
-      type: "list",
+      type: "input",
       name: "manager_id",
-      message: "Who is employee's manager?",
-      choices: [],
-      // list of names of managers from employee table
+      message: "What is their manager's id?",
+      validate: validateNum
     },
   ]);
 }
