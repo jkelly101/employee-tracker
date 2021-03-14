@@ -15,6 +15,14 @@ connection.connect((err) => {
   firstQuestion();
 });
 
+const validateInput = (input) => {
+  if (input.trim().length <= 0) {
+    return "Invalid entry. Please try again.";
+  } else {
+    return true;
+  }
+};
+
 // * The command-line application should allow users to:
 
 function firstQuestion() {
@@ -68,13 +76,7 @@ function newDepartment() {
         type: "input",
         name: "name",
         message: "What is the Department name?",
-        validate: (input) => {
-          if (input.trim().length <= 0) {
-            return "Invalid entry. Please try again.";
-          } else {
-            return true;
-          }
-        },
+        validate: validateInput,
       },
     ])
     .then((response) => {
@@ -122,7 +124,7 @@ function newRole() {
       },
       {
         type: "list",
-        name: "department_id",
+        name: "departments_id",
         message: "To which department does this role belong?",
         choices: departmentChoices,
         // choices = name of departments from department table
@@ -144,25 +146,13 @@ function newEmployee() {
       type: "input",
       name: "first_name",
       message: "What is employee's first name?",
-      validate: (input) => {
-        if (input.trim().length <= 0) {
-          return "Invalid entry. Please try again.";
-        } else {
-          return true;
-        }
-      },
+      validate: validateInput,
     },
     {
       type: "input",
       name: "last_name",
       message: "What is employee's last name?",
-      validate: (input) => {
-        if (input.trim().length <= 0) {
-          return "Invalid entry. Please try again.";
-        } else {
-          return true;
-        }
-      },
+      validate: validateInput,
     },
     {
       type: "list",
