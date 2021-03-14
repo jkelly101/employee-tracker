@@ -152,11 +152,6 @@ function insertRole(data) {
   });
 }
 
-// * **title** -  VARCHAR(30) to hold role title
-// * **salary** -  DECIMAL to hold role salary
-// * **department_id** -  INT to hold reference to department role belongs to
-// function insertRole()
-
 function newEmployee() {
   roleChoices = roles.map((dbData) => {
     return { name: dbData.title, value: dbData.id };
@@ -185,22 +180,24 @@ function newEmployee() {
       name: "manager_id",
       message: "What is the Manager ID?",
       validate: validateNum
-    },
-  ]);
+    }
+  ])
+  .then((response) => {
+    response.roles_id = parseInt(response.roles_id);
+    response.manager_id = parseInt(response.manager_id);
+    insertEmployee(response);
+  });
+}
+function insertEmployee(data) {
+  connection.query("INSERT employees SET ?", data, (err) => {
+    if (err) return console.error(err);
+    console.log("Employee added.");
+    firstQuestion();
+  });
 }
 
-// * **id** - INT PRIMARY KEY
-// * **first_name** - VARCHAR(30) to hold employee first name
-// * **last_name** - VARCHAR(30) to hold employee last name
-// * **role_id** - INT to hold reference to role employee has
-// * **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
-
-// function insertEmployee()
-
-//   * View departments, roles, employees
 
 function viewDepartment() {
-  // *** getAuctionList function
   connection.query("SELECT * FROM departments", (err, results) => {
     if (err) return console.error(err);
     console.table(results);
@@ -208,9 +205,22 @@ function viewDepartment() {
   });
 }
 
-// function viewRoles()
+function viewRoles() {
+  connection.query("SELECT * FROM roles", (err, results) => {
+    if (err) return console.error(err);
+    console.table(results);
+    firstQuestion();
+  });
+}
 
-// function viewEmployees()
+
+function viewEmployees() {
+  connection.query("SELECT * FROM employees", (err, results) => {
+    if (err) return console.error(err);
+    console.table(results);
+    firstQuestion();
+  });
+}
 
 //   * Update employee roles
 
