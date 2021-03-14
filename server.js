@@ -58,7 +58,7 @@ function firstQuestion() {
       } else if (choice === "View employees") {
         viewEmployees();
       } else if (choice === "Update employee role") {
-        updateRole();
+        updateEmployee();
       } else if (choice === "Exit") {
         console.log("Goodbye!");
         connection.end();
@@ -213,11 +213,44 @@ function viewEmployees() {
   });
 }
 
+function updateEmployee() {
+  allEmployees = employees.map((dbData) => {
+    return {
+      name: dbData.first_name + " " + dbData.last_name,
+      value: { ...dbData },
+    };
+  });
+  roleChoices = roles.map((dbData) => {
+    return { name: dbData.title, value: dbData.id };
+  });
+
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "chosen",
+        message: "Which employee would you like to update?",
+        choices: allEmployees,
+      },
+      {
+        type: "list",
+        name: "role",
+        message: "What is employee's new role?",
+        choices: roleChoices,
+      },
+    ])
+    .then((response) => {
+      let { chosen, role } = response;
+      role = parseInt(role);
+      updateRole(chosen, role);
+    });
+}
+
 function updateRole(chosen, role) {
   const setValue = { roles_id: role };
   const whereValue = { id: chosen.id };
   connection.query(
-    "UPDATE roles SET ? WHERE ?",
+    "UPDATE employees SET ? WHERE ?",
     [setValue, whereValue],
     (err) => {
       if (err) return console.error(err);
