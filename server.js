@@ -15,6 +15,9 @@ connection.connect((err) => {
   firstQuestion();
 });
 
+let departments;
+let roles;
+
 const validateInput = (input) => {
   if (input.trim().length <= 0) {
     return "Invalid entry. Please try again.";
@@ -26,6 +29,15 @@ const validateInput = (input) => {
 // * The command-line application should allow users to:
 
 function firstQuestion() {
+  connection.query("SELECT name, id FROM departments", (err, results) => {
+    if (err) return console.error(err);
+    departments = results;
+  });
+
+  connection.query("SELECT title, id FROM roles", (err, results) => {
+    if (err) return console.error(err);
+    roles = results;
+  });
   inquirer
     .prompt([
       {
@@ -85,7 +97,7 @@ function newDepartment() {
     });
 }
 function insertDepartment(data) {
-  connection.query("INSERT department SET ?", data, (err) => {
+  connection.query("INSERT departments SET ?", data, (err) => {
     if (err) return console.error(err);
     console.log("Department added.");
     firstQuestion();
@@ -102,13 +114,7 @@ function newRole() {
         type: "input",
         name: "title",
         message: "What is the role name?",
-        validate: (input) => {
-          if (input.trim().length <= 0) {
-            return "Invalid entry. Please try again.";
-          } else {
-            return true;
-          }
-        },
+        validate: validateInput
       },
       {
         type: "input",
@@ -131,8 +137,17 @@ function newRole() {
       },
     ])
     .then((response) => {
-      console.log(response);
+      response.departments_id = parseInt(response.departments_id);
+      response.salary = parseInt(response.salary);
+      insertRole(response);
     });
+}
+function insertRole(data) {
+  connection.query("INSERT roles SET ?", data, (err) => {
+    if (err) return console.error(err);
+    console.log("Role added.");
+    firstQuestion();
+  });
 }
 
 // * **title** -  VARCHAR(30) to hold role title
