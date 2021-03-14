@@ -158,6 +158,9 @@ function insertRole(data) {
 // function insertRole()
 
 function newEmployee() {
+  roleChoices = roles.map((dbData) => {
+    return { name: dbData.title, value: dbData.id };
+  });
   inquirer.prompt([
     {
       type: "input",
@@ -174,14 +177,13 @@ function newEmployee() {
     {
       type: "list",
       name: "role_id",
-      message: "What is employee's role?",
-      choices: [],
-      // list of role titles from role table
+      message: "What is their role?",
+      choices: roleChoices,
     },
     {
       type: "input",
       name: "manager_id",
-      message: "What is their manager's id?",
+      message: "What is the Manager ID?",
       validate: validateNum
     },
   ]);
