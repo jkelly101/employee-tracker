@@ -4,29 +4,29 @@ CREATE DATABASE employee_db;
 USE employee_db;
 
 
-CREATE TABLE department(
+CREATE TABLE departments(
 id INTEGER auto_increment NOT NULL,
 name VARCHAR(30) NOT NULL,
 
 PRIMARY KEY(id)
 );
 
-CREATE TABLE role(
+CREATE TABLE roles(
 id INTEGER auto_increment NOT NULL,
 title VARCHAR(30) NOT NULL,
 salary DECIMAL(8, 2) NOT NULL,
-department_id INTEGER,
+departments_id INTEGER,
 
-FOREIGN KEY (department_id) REFERENCES department(id),
+FOREIGN KEY (departments_id) REFERENCES departments(id),
 PRIMARY KEY(id)
 );
 
-CREATE TABLE employee(
+CREATE TABLE employees(
 id INTEGER auto_increment NOT NULL,
 first_name VARCHAR(30) NOT NULL,
 last_name VARCHAR(30) NOT NULL,
-role_id INTEGER,
+roles_id INTEGER,
 manager_id INTEGER,
-FOREIGN KEY (role_id) REFERENCES role(id),
+FOREIGN KEY (roles_id) REFERENCES roles(id),
 PRIMARY KEY(id)
 );

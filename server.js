@@ -17,9 +17,6 @@ connection.connect((err) => {
 
 // * The command-line application should allow users to:
 
-var departments;
-var roles;
-
 function firstQuestion() {
   inquirer
     .prompt([
@@ -194,12 +191,12 @@ function newEmployee() {
 
 //   * View departments, roles, employees
 
-function viewDepartment(){
+function viewDepartment() {
   // *** getAuctionList function
   connection.query("SELECT * FROM departments", (err, results) => {
-      if(err) return console.error(err);
-      console.table(results);
-      firstQuestion();
+    if (err) return console.error(err);
+    console.table(results);
+    firstQuestion();
   });
 }
 
