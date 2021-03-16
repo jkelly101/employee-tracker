@@ -206,7 +206,7 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-  connection.query("SELECT * FROM employees", (err, results) => {
+  connection.query("SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments.name, employees.manager_id FROM employees LEFT JOIN roles ON employees.roles_id = roles.id LEFT JOIN departments ON roles.departments_id = departments.id", (err, results) => {
     if (err) return console.error(err);
     console.table(results);
     firstQuestion();
@@ -214,7 +214,9 @@ function viewEmployees() {
 }
 
 function updateEmployee() {
-  allEmployees = employees.map((dbData) => {
+  connection.query("SELECT * FROM employees", (err, results) => {
+    if (err) return console.error(err);
+    let allEmployees = results.map((dbData) => {
     return {
       name: dbData.first_name + " " + dbData.last_name,
       value: { ...dbData },
@@ -244,7 +246,7 @@ function updateEmployee() {
       role = parseInt(role);
       updateRole(chosen, role);
     });
-}
+})}
 
 function updateRole(chosen, role) {
   const setValue = { roles_id: role };
@@ -259,3 +261,16 @@ function updateRole(chosen, role) {
     }
   );
 }
+
+function deleteEmployee(chosen, employee) {
+  connection.query("SELECT * FROM employees", (err, results) => {
+    if (err) return console.error(err);
+    let allEmployees = results.map((dbData) => {
+    return {
+      name: dbData.first_name + " " + dbData.last_name,
+      value: { ...dbData },
+    }; 
+}).then((resonse))
+
+
+  })}
