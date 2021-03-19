@@ -35,7 +35,7 @@ function firstQuestion() {
           "Add department",
           "Add role",
           "Add employee",
-          "View department",
+          "View departments",
           "View roles",
           "View employees",
           "Update employee role",
@@ -90,13 +90,13 @@ function newDepartment() {
     .prompt([
       {
         type: "input",
-        name: "name",
+        name: "department",
         message: "What is the Department name?",
         validate: validateInput,
       },
     ])
     .then((response) => {
-      response.name = response.name;
+      response.department = response.department;
       insertDepartment(response);
     });
 }
@@ -110,7 +110,7 @@ function insertDepartment(data) {
 
 function newRole() {
   departmentChoices = departments.map((dbData) => {
-    return { name: dbData.name, value: dbData.id };
+    return { name: dbData.department, value: { ...dbData } };
   });
   inquirer
     .prompt([
@@ -128,18 +128,22 @@ function newRole() {
       },
       {
         type: "list",
-        name: "departments_id",
+        name: "department",
         message: "To which department does this role belong?",
         choices: departmentChoices,
       },
     ])
     .then((response) => {
-      response.departments_id = parseInt(response.departments_id);
       response.salary = parseInt(response.salary);
-      insertRole(response);
+      insertRole({
+        title: response.title,
+        salary: response.salary,
+        departments_Id: response.department.id,
+      });
     });
 }
 function insertRole(data) {
+  console.log(data);
   connection.query("INSERT roles SET ?", data, (err) => {
     if (err) return console.error(err);
     console.log("Role added.");
@@ -201,11 +205,14 @@ function viewDepartment() {
 }
 
 function viewRoles() {
-  connection.query("SELECT * FROM roles", (err, results) => {
-    if (err) return console.error(err);
-    console.table(results);
-    firstQuestion();
-  });
+  connection.query(
+    "SELECT roles.id, roles.title, roles.salary, departments.department FROM roles LEFT JOIN departments ON roles.departments_id = departments.id ",
+    (err, results) => {
+      if (err) return console.error(err);
+      console.table(results);
+      firstQuestion();
+    }
+  );
 }
 
 function viewEmployees() {
