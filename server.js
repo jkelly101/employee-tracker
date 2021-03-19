@@ -39,6 +39,7 @@ function firstQuestion() {
           "View roles",
           "View employees",
           "Update employee role",
+          "Delete employee",
           "Exit",
         ],
       },
@@ -59,6 +60,8 @@ function firstQuestion() {
         viewEmployees();
       } else if (choice === "Update employee role") {
         updateEmployee();
+      } else if (choice === "Delete employee") {
+        deleteEmployee();
       } else if (choice === "Exit") {
         console.log("Goodbye!");
         connection.end();
@@ -206,47 +209,51 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-  connection.query("SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments.name, employees.manager_id FROM employees LEFT JOIN roles ON employees.roles_id = roles.id LEFT JOIN departments ON roles.departments_id = departments.id", (err, results) => {
-    if (err) return console.error(err);
-    console.table(results);
-    firstQuestion();
-  });
+  connection.query(
+    "SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments.name, employees.manager_id FROM employees LEFT JOIN roles ON employees.roles_id = roles.id LEFT JOIN departments ON roles.departments_id = departments.id",
+    (err, results) => {
+      if (err) return console.error(err);
+      console.table(results);
+      firstQuestion();
+    }
+  );
 }
 
 function updateEmployee() {
   connection.query("SELECT * FROM employees", (err, results) => {
     if (err) return console.error(err);
     let allEmployees = results.map((dbData) => {
-    return {
-      name: dbData.first_name + " " + dbData.last_name,
-      value: { ...dbData },
-    };
-  });
-  roleChoices = roles.map((dbData) => {
-    return { name: dbData.title, value: dbData.id };
-  });
-
-  inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "chosen",
-        message: "Which employee would you like to update?",
-        choices: allEmployees,
-      },
-      {
-        type: "list",
-        name: "role",
-        message: "What is employee's new role?",
-        choices: roleChoices,
-      },
-    ])
-    .then((response) => {
-      let { chosen, role } = response;
-      role = parseInt(role);
-      updateRole(chosen, role);
+      return {
+        name: dbData.first_name + " " + dbData.last_name,
+        value: { ...dbData },
+      };
     });
-})}
+    roleChoices = roles.map((dbData) => {
+      return { name: dbData.title, value: dbData.id };
+    });
+
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "chosen",
+          message: "Which employee would you like to update?",
+          choices: allEmployees,
+        },
+        {
+          type: "list",
+          name: "role",
+          message: "What is employee's new role?",
+          choices: roleChoices,
+        },
+      ])
+      .then((response) => {
+        let { chosen, role } = response;
+        role = parseInt(role);
+        updateRole(chosen, role);
+      });
+  });
+}
 
 function updateRole(chosen, role) {
   const setValue = { roles_id: role };
@@ -265,12 +272,44 @@ function updateRole(chosen, role) {
 function deleteEmployee(chosen, employee) {
   connection.query("SELECT * FROM employees", (err, results) => {
     if (err) return console.error(err);
-    let allEmployees = results.map((dbData) => {
-    return {
-      name: dbData.first_name + " " + dbData.last_name,
-      value: { ...dbData },
-    }; 
-}).then((resonse))
+    allEmployees = results.map((dbData) => {
+      return {
+        name: dbData.first_name + " " + dbData.last_name,
+        value: { ...dbData },
+      };
+    });
 
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "chosen",
+          message: "Which employee would you like to delete?",
+          choices: allEmployees,
+        },
+      ])
 
-  })}
+      .then((response) => {
+        let { chosen, first_name, last_name } = response;
+        first_name = parseInt(first_name);
+        last_name = parseInt(last_name);
+
+        chosenEmployee(chosen, first_name, last_name);
+      });
+  });
+}
+
+function chosenEmployee(chosen, employee) {
+  const whereValue = { first_name: chosen.first_name };
+  const whereValue2 = { last_name: chosen.last_name };
+
+  connection.query(
+    "DELETE FROM employees WHERE ? AND ?",
+    [whereValue, whereValue2],
+    (err) => {
+      if (err) return console.error(err);
+      console.log("Employee deleted.");
+      firstQuestion();
+    }
+  );
+}

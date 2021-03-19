@@ -30,3 +30,8 @@ manager_id INTEGER,
 FOREIGN KEY (roles_id) REFERENCES roles(id),
 PRIMARY KEY(id)
 );
+
+USE employee_db;
+SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments.name, employees.manager_id FROM employees LEFT JOIN roles ON employees.roles_id = roles.id
+LEFT JOIN departments ON roles.departments_id = departments.id
+-- LEFT JOIN employees ON employees.manager_id = employees.id;
