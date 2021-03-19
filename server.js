@@ -16,7 +16,7 @@ connection.connect((err) => {
 });
 
 function firstQuestion() {
-  connection.query("SELECT name, id FROM departments", (err, results) => {
+  connection.query("SELECT department, id FROM departments", (err, results) => {
     if (err) return console.error(err);
     departments = results;
   });
@@ -210,7 +210,7 @@ function viewRoles() {
 
 function viewEmployees() {
   connection.query(
-    "SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments.name, employees.manager_id FROM employees LEFT JOIN roles ON employees.roles_id = roles.id LEFT JOIN departments ON roles.departments_id = departments.id",
+    "SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments.department, employees.manager_id FROM employees LEFT JOIN roles ON employees.roles_id = roles.id LEFT JOIN departments ON roles.departments_id = departments.id",
     (err, results) => {
       if (err) return console.error(err);
       console.table(results);
